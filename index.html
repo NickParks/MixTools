@@ -285,6 +285,24 @@
     </div>
     <!-- /#wrapper -->
 
+    <!-- Modal -->
+    <div class="modal fade" id="no-storage-modal" tabindex="-1" role="dialog" aria-labelledby="no-storage-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Javascript not supported</h4>
+                </div>
+                <div class="modal-body">
+                    Your browser does not support the required javascript! Please update your browser or use a different one!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="window.location.href=window.location.href">Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
 
@@ -302,6 +320,8 @@
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
 
+    <!-- Custom Javascript -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>
