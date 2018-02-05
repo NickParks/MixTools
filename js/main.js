@@ -35,8 +35,6 @@ var peakViewers = 0;
 
 function startMixer(channel) {
     $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
-        console.log(data);
-
         if (data.statusCode == 404) {
             alert("Name not found, please enter a correct channel name!");
             location.reload();
