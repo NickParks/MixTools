@@ -2,13 +2,6 @@ if (typeof (Storage) == "undefined") {
     $("#no-storage-modal").modal('toggle');
 }
 
-var data = {
-    labels: ['2018-02-04 12:00:00', '2018-02-04 12:05:00', '2018-02-04 12:10:00', '2018-02-04 12:15:00', '2018-02-04 12:20:00', '2018-02-04 12:25:00', '2018-02-04 12:30:00', '2018-02-04 12:35:00', '2018-02-04 12:40:00', '2018-02-04 12:45:00'],
-    series: [
-        [10, 22, 18, 16, 20, 13, 15, 17, 15, 7]
-    ]
-};
-
 var ctx = $("#myChart");
 var myChart = new Chart(ctx, {
     type: 'line',
@@ -50,10 +43,14 @@ function pushToChart(chart, label, data) {
     chart.update();
 }
 
+function startMixer(channel) {
+    $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {
+        console.log(data);
 
-setInterval(function () {
-    var date = new Date();
-    pushToChart(myChart, date.getHours() + ":" + date.getMinutes(), Math.floor((Math.random() * 30) + 1));
-}, 60000);
+        setItem("name", channel);
+    }).fail(function () {
+        alert("Error ~ please refresh.");
+    });
+}
 
 //Initialize session storage
