@@ -22,12 +22,15 @@ if(getItem("name") == undefined) {
     });
 } else {
     startMixer(getItem("name")); //Start collecting with the username in session storage
+
+    //Set previous values
+    $("#peak-viewer-count").text(getItem("peak-viewers"));
+    $("#net-follower-gain").text(getItem("new-followers"));
+    $("#unique-viewer-number").text(getItem("new-viewers"));
 }
 
 var ca;
 var liveViewerChart;
-
-var startingViewerCount = 0;
 
 var uniqueViewers = 0;
 var newFollowers = 0;
@@ -45,8 +48,9 @@ function startMixer(channel) {
         setItem("user-id", data.user.id);
         setItem("starting-viewer-total", data.viewersTotal);
         setItem("starting-follower-number", data.numFollowers);
-
-        startingViewerCount = data.viewersTotal;
+        setItem("peak-viewers", data.viewersCurrent);
+        setItem("new-followers", 0);
+        setItem("new-viewers", 0);
 
         startCarina(data.id);
         startViewerTracking(data.viewersCurrent);
@@ -63,14 +67,15 @@ function startCarina(id) {
     ca = new carina.Carina().open();
     ca.subscribe('channel:' + id + ':update', function (data) {
         if (data.viewersCurrent != undefined) {
-            if (data.viewersCurrent > peakViewers) {
-                peakViewers = data.viewersCurrent;
-                $("#peak-viewer-count").text(peakViewers);
+            if (data.viewersCurrent > getItem("peak-viewers")) {
+                setItem("peak-viewers", data.viewersCurrent);
+                $("#peak-viewer-count").text(getItem("peak-viewers"));
             }
         }
 
         if (data.viewersTotal != undefined) {
-            $("#unique-viewer-number").text((data.viewersTotal - startingViewerCount));
+            setItem("new-viewers", (data.viewersTotal - getItem("starting-viewer-total")));
+            $("#unique-viewer-number").text(getItem("new-viewers"));
         }
 
         console.log(data);
@@ -78,12 +83,12 @@ function startCarina(id) {
 
     ca.subscribe('channel:' + id + ':followed', function (data) {
         if (data.following) {
-            newFollowers++;
+            setItem("new-followers", parseInt(getItem("new-followers")) + 1);
         } else {
-            newFollowers--;
+            setItem("new-followers", parseInt(getItem("new-followers")) - 1);
         }
 
-        $("#net-follower-gain").text(newFollowers);
+        $("#net-follower-gain").text(getItem("new-followers"));
     });
 }
 
