@@ -25,8 +25,35 @@ var myChart = new Chart(ctx, {
     options: {
         title: {
             display: false
+        },
+        legend: {
+            display: false
         }
     }
-})
+});
+
+/**
+ * Pushes new information the provided ChartJS chart
+ * In this case the label will be a timestamp/date and the data will be the viewer count
+ * 
+ * @param {any} chart The chart object
+ * @param {any} label The label for the data
+ * @param {any} data The data to be inserted into the dataset
+ */
+function pushToChart(chart, label, data) {
+    chart.data.labels.splice(0, 1);
+    chart.data.datasets[0].data.splice(0, 1);
+
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(data);
+
+    chart.update();
+}
+
+
+setInterval(function () {
+    var date = new Date();
+    pushToChart(myChart, date.getHours() + ":" + date.getMinutes(), Math.floor((Math.random() * 30) + 1));
+}, 60000);
 
 //Initialize session storage
