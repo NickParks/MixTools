@@ -12,14 +12,17 @@ if(getItem("name") == undefined) {
             $("#username-submit-button").prop('disabled', true);
         }
     });
+
+    //Only add the listener if the input is needed
+    $("#username-submit-button").click(function () {
+        $("#enter-channel-name-modal").modal('toggle');
+    
+        //Start the mixer collection process
+        startMixer($("#username-input").val());
+    });
+} else {
+    startMixer(getItem("name")); //Start collecting with the username in session storage
 }
-
-$("#username-submit-button").click(function () {
-    $("#enter-channel-name-modal").modal('toggle');
-
-    //Start the mixer collection process
-    startMixer($("#username-input").val());
-});
 
 var ca;
 var liveViewerChart;
