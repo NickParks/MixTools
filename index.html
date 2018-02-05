@@ -20,9 +20,6 @@
     <!-- Custom CSS -->
     <link href="dist/css/sb-admin-2.css" rel="stylesheet">
 
-    <!-- Morris Charts CSS -->
-    <link href="vendor/morrisjs/morris.css" rel="stylesheet">
-
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
 
@@ -175,7 +172,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div id="morris-area-chart"></div>
+                            <canvas id="myChart" height="100%"></canvas>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -279,6 +276,7 @@
                 <!-- /.col-lg-4 -->
             </div>
             <!-- /.row -->
+
         </div>
         <!-- /#page-wrapper -->
 
@@ -312,10 +310,8 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="vendor/metisMenu/metisMenu.min.js"></script>
 
-    <!-- Morris Charts JavaScript -->
-    <script src="vendor/raphael/raphael.min.js"></script>
-    <script src="vendor/morrisjs/morris.min.js"></script>
-    <script src="data/morris-data.js"></script>
+    <!-- ChartJS -->
+    <script src="js/Chart.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
