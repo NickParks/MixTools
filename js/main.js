@@ -84,13 +84,6 @@ function startViewerTracking(currentViewers) {
             },
             legend: {
                 display: false
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
             }
         }
     });
@@ -98,6 +91,14 @@ function startViewerTracking(currentViewers) {
     $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
     }).done(function (data) {
+        if (data.viewersCurrent - 30 <= 0) {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+        } else {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data.viewersCurrent - 30) / 10, 10) * 10;
+        }
+
+        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
+
         pushToChart(liveViewerChart, getHumanDate(), data.viewersCurrent);
     }).fail(function (data) {
         //Do nothing for now
@@ -108,7 +109,6 @@ function startViewerTracking(currentViewers) {
         $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
         }).done(function (data) {
-            console.log("Pushing " + data.viewersCurrent + " to chart");
             pushToChart(liveViewerChart, getHumanDate(), data.viewersCurrent);
         }).fail(function (data) {
             //Do nothing for now
@@ -132,6 +132,18 @@ function pushToChart(chart, label, data) {
 
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
+
+    if (data <= (liveViewerChart.options.scales.yAxes[0].ticks.min + 10)) {
+        if (data - 30 <= 0) {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+        } else {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
+        }
+    }
+
+    if (data >= (liveViewerChart.options.scales.yAxes[0].ticks.max - 10)) {
+        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
+    }
 
     chart.update();
 }
