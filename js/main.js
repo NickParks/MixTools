@@ -31,6 +31,8 @@ function startMixer(channel) {
         startCarina(data.id);
         startViewerTracking(data.viewersCurrent);
 
+        // Set username in the top right
+        $("#mixer-username").text(data.token);        
     }).fail(function () {
         alert("Error ~ please refresh.");
         location.reload();
@@ -105,7 +107,6 @@ function startViewerTracking(currentViewers) {
     });
 
     setInterval(function () {
-        console.log("FIRE");
         $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
         }).done(function (data) {
