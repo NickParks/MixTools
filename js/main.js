@@ -2,28 +2,15 @@ if (typeof (Storage) == "undefined") {
     $("#no-storage-modal").modal('toggle');
 }
 
+var ca;
+
+var startingViewerCount = 0;
+
+var uniqueViewers = 0;
+var newFollowers = 0;
+var peakViewers = 0;
+
 var ctx = $("#myChart");
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Noon', 'Noon', 'Noon', 'Noon', 'Noon', 'Noon', 'Noon', 'Noon', 'Noon', 'Noon'],
-        datasets: [{
-            data: [10, 22, 18, 16, 20, 13, 15, 17, 15, 7],
-            label: "Viewers",
-            borderColor: "#0B62A4",
-            backgroundColor: "#2677B5",
-            fill: true
-        }]
-    },
-    options: {
-        title: {
-            display: false
-        },
-        legend: {
-            display: false
-        }
-    }
-});
 
 /**
  * Pushes new information the provided ChartJS chart
@@ -44,13 +31,54 @@ function pushToChart(chart, label, data) {
 }
 
 function startMixer(channel) {
-    $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {
+    $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
         console.log(data);
 
-        setItem("name", channel);
+        if (data.statusCode == 404) {
+            alert("Name not found, please enter a correct channel name!");
+            location.reload();
+        }
+
+        setItem("name", data.token);
+        setItem("channel-id", data.id);
+        setItem("user-id", data.user.id);
+        setItem("starting-viewer-total", data.viewersTotal);
+        setItem("starting-follower-number", data.numFollowers);
+
+        startingViewerCount = data.viewersTotal;
+
+        startCarina(data.id);
+
     }).fail(function () {
         alert("Error ~ please refresh.");
+        location.reload();
     });
 }
 
-//Initialize session storage
+function startCarina(id) {
+    ca = new carina.Carina().open();
+    ca.subscribe('channel:' + id + ':update', function (data) {
+        if (data.viewersCurrent != undefined) {
+            if (data.viewersCurrent > peakViewers) {
+                peakViewers = data.viewersCurrent;
+                $("#peak-viewer-count").text(peakViewers);
+            }
+        }
+
+        if (data.viewersTotal != undefined) {
+            $("#unique-viewer-number").text((data.viewersTotal - startingViewerCount));
+        }
+
+        console.log(data);
+    });
+
+    ca.subscribe('channel:' + id + ':followed', function (data) {
+        if (data.following) {
+            newFollowers++;
+        } else {
+            newFollowers--;
+        }
+
+        $("#net-follower-gain").text(newFollowers);
+    });
+}
