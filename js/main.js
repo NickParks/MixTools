@@ -2,6 +2,25 @@ if (typeof (Storage) == "undefined") {
     $("#no-storage-modal").modal('toggle');
 }
 
+if(getItem("name") == undefined) {
+    $("#enter-channel-name-modal").modal('toggle');
+
+    $("#username-input").on('input', function () {
+        if ($("#username-input").val().length != 0) {
+            $("#username-submit-button").prop('disabled', false);
+        } else {
+            $("#username-submit-button").prop('disabled', true);
+        }
+    });
+}
+
+$("#username-submit-button").click(function () {
+    $("#enter-channel-name-modal").modal('toggle');
+
+    //Start the mixer collection process
+    startMixer($("#username-input").val());
+});
+
 var ca;
 var liveViewerChart;
 
