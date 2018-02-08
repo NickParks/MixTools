@@ -30,12 +30,7 @@ if (getItem("name") == undefined) {
     $("#unique-viewer-number").text(getItem("new-viewers"));
 }
 
-var ca;
 var liveViewerChart;
-
-var uniqueViewers = 0;
-var newFollowers = 0;
-var peakViewers = 0;
 
 function startMixer(channel) {
     $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
@@ -127,7 +122,7 @@ function pushToChart(chart, label, data) {
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
     }
-    
+
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
 
