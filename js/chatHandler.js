@@ -62,9 +62,7 @@ function connectToChat(id) {
                     setItem("recent-messages", JSON.stringify(recentMessages));
                 }
             }
-
         });
-
     }).fail((data) => {
         alert("Failed to connect to chat.");
     });
