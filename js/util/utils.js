@@ -26,9 +26,24 @@ function getItem(name) {
  */
 function addToTable(tableId, markup) {
     var table = document.getElementById(tableId);
-    var newRow = table.insertRow(table.rows + 1);
+    var newRow = table.insertRow(table.rows.length);
     var newCell = newRow.insertCell(0);
     newCell.innerHTML = markup;
+}
+
+/**
+ * Removes a specified row from the table.
+ * If index = -1 it removes the first element of the table
+ * 
+ * @param {any} tableId The ID of the table
+ * @param {any} index The index of the table to remove
+ */
+function removeFromTable(tableId, index) {
+    if(index == -1) {
+        document.getElementById(tableId).deleteRow(0);
+    } else {
+        document.getElementById(tableId).deleteRow(index);
+    }
 }
 
 /**

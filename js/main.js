@@ -141,3 +141,11 @@ function pushToChart(chart, label, data) {
 
     chart.update();
 }
+
+addToTable("recent-events-table", "<b>tesT 1</b>");
+addToTable("recent-events-table", "<b>tesT 2</b>");
+addToTable("recent-events-table", "<b>tesT 3</b>");
+
+setTimeout(function() {
+    removeFromTable("recent-events-table", -1);
+}, 5000);
