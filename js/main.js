@@ -94,7 +94,7 @@ function startViewerTracking(currentViewers) {
 
         liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
 
-        pushToChart(liveViewerChart, getHumanDate(), data.viewersCurrent);
+        pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
     }).fail(function (data) {
         //Do nothing for now
     });
@@ -103,7 +103,7 @@ function startViewerTracking(currentViewers) {
         $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
         }).done(function (data) {
-            pushToChart(liveViewerChart, getHumanDate(), data.viewersCurrent);
+            pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
         }).fail(function (data) {
             //Do nothing for now
         });
