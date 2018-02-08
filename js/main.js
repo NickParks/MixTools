@@ -51,7 +51,7 @@ function startMixer(channel) {
         startCarina(data.id);
         startViewerTracking(data.viewersCurrent);
         connectToChat(data.id);
-        
+
         // Set username in the top right
         $("#mixer-username").text(data.token);
     }).fail(function () {
@@ -140,12 +140,4 @@ function pushToChart(chart, label, data) {
     }
 
     chart.update();
-}
-
-function getHumanDate() {
-    return new Date().toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-    });
 }
