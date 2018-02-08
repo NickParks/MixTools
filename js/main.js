@@ -2,6 +2,7 @@ if (typeof (Storage) == "undefined") {
     $("#no-storage-modal").modal('toggle');
 }
 
+//Check if a name already exists in sessionStorage 
 if (getItem("name") == undefined) {
     $("#enter-channel-name-modal").modal('toggle');
 
@@ -64,32 +65,7 @@ function startMixer(channel) {
 }
 
 function startCarina(id) {
-    ca = new carina.Carina().open();
-    ca.subscribe('channel:' + id + ':update', function (data) {
-        if (data.viewersCurrent != undefined) {
-            if (data.viewersCurrent > getItem("peak-viewers")) {
-                setItem("peak-viewers", data.viewersCurrent);
-                $("#peak-viewer-count").text(getItem("peak-viewers"));
-            }
-        }
-
-        if (data.viewersTotal != undefined) {
-            setItem("new-viewers", (data.viewersTotal - getItem("starting-viewer-total")));
-            $("#unique-viewer-number").text(getItem("new-viewers"));
-        }
-
-        console.log(data);
-    });
-
-    ca.subscribe('channel:' + id + ':followed', function (data) {
-        if (data.following) {
-            setItem("new-followers", parseInt(getItem("new-followers")) + 1);
-        } else {
-            setItem("new-followers", parseInt(getItem("new-followers")) - 1);
-        }
-
-        $("#net-follower-gain").text(getItem("new-followers"));
-    });
+    new carinaHandler(id);
 }
 
 function startViewerTracking(currentViewers) {
