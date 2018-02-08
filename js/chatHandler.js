@@ -1,5 +1,7 @@
 var chatSocket;
 
+setItem("recent-messages", JSON.stringify([])); //Create and empty the array on every load
+
 function connectToChat(id) {
     $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => { }).done((data) => {
         //Connect to chat
@@ -18,10 +20,12 @@ function connectToChat(id) {
 
         chatSocket.addEventListener('message', (event) => {
             //Listen to different events sent
-            var data = JSON.parse(event.data);
-            console.log(data);
+            var data = JSON.parse(event.data); //Parse the event data
+
             if(data.type == "event") {
+                //Welcome event - called on first connect
                 if(data.event == "WelcomeEvent") {
+                    //Connect to chat so we can start getting live events
                     var authPacket = {
                         "type": "method",
                         "method": "auth",
@@ -33,6 +37,26 @@ function connectToChat(id) {
 
                      chatSocket.send(JSON.stringify(authPacket));
                 }
+
+                //Chat event
+                if(data.event == "ChatMessage") {
+                    //Store recent 30 messages in array
+                    var recentMessages = JSON.parse(getItem("recent-messages"));
+                    if(recentMessages.length >= 30) {
+                        recentMessages.shift();
+                    }
+
+                    var message = {
+                        id: data.data.id,
+                        msg: buildMsg(data.data.message.message),
+                        sender: data.data.user_name
+                    }
+
+                    console.log("Pushing to recentMessages", message);
+
+                    recentMessages.push(message);
+                    setItem("recent-messages", JSON.stringify(recentMessages));
+                }
             }
 
         });
@@ -40,6 +64,16 @@ function connectToChat(id) {
     }).fail((data) => {
         alert("Failed to connect to chat.");
     });
+}
+
+function buildMsg(messages) {
+    var message = "";
+
+    messages.forEach(obj => {
+        message += obj.text;    
+    });
+
+    return message.trim();
 }
 
 function closeChat(){
