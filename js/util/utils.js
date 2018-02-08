@@ -18,6 +18,39 @@ function getItem(name) {
     return sessionStorage[name];
 }
 
+
+/**
+ * Pushes new information the provided ChartJS chart
+ * In this case the label will be a timestamp/date and the data will be the viewer count
+ * 
+ * @param {any} chart The chart object
+ * @param {any} label The label for the data
+ * @param {any} data The data to be inserted into the dataset
+ */
+function pushToChart(chart, label, data) {
+    if (chart.data.labels.length > 15) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+    }
+
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(data);
+
+    if (data <= (liveViewerChart.options.scales.yAxes[0].ticks.min + 10)) {
+        if (data - 30 <= 0) {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+        } else {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
+        }
+    }
+
+    if (data >= (liveViewerChart.options.scales.yAxes[0].ticks.max - 10)) {
+        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
+    }
+
+    chart.update();
+}
+
 /**
  * Creates a new row in a table and then inserts the HTML markup
  * 
