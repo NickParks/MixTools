@@ -3,8 +3,7 @@ var chatSocket;
 function connectToChat(id) {
     $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => { }).done((data) => {
         //Connect to chat
-        console.log(data.endpoints[0]);
-        chatSocket = new WebSocket(data.endpoints[0]);
+        chatSocket = new WebSocket(data.endpoints[generateRandNumb(0, data.endpoints.length)]);
 
         chatSocket.addEventListener('open', (event) => {
             console.log("Connected to chat socket");
@@ -12,6 +11,7 @@ function connectToChat(id) {
 
         chatSocket.addEventListener('error', (event) => {
             console.log("WebSocket error", event.data);
+            return connectToChat(id); //Just recursivly keep trying to reconnect
         });
 
         chatSocket.addEventListener('message', (event) => {
