@@ -20,8 +20,12 @@ function startCarina(id){
     ca.subscribe(`channel:${this.id}:followed`, (data) => {
         if (data.following) {
             setItem("new-followers", parseInt(getItem("new-followers")) + 1); //Add one to the total new followers
+            var markup = "<i class='fas fa-plus'></i>" + data.user.username + " followed";
+            addToTable("recent-events-table", markup);
         } else {
             setItem("new-followers", parseInt(getItem("new-followers")) - 1); //Subtract the total new followers
+            var markup = "<i class='fas fa-minus'></i>" + data.user.username + " unfollowed";
+            addToTable("recent-events-table", markup);
         }
 
         $("#net-follower-gain").text(getItem("new-followers")); //Display to the user
