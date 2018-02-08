@@ -2,7 +2,7 @@ if (typeof (Storage) == "undefined") {
     $("#no-storage-modal").modal('toggle');
 }
 
-if(getItem("name") == undefined) {
+if (getItem("name") == undefined) {
     $("#enter-channel-name-modal").modal('toggle');
 
     $("#username-input").on('input', function () {
@@ -16,7 +16,7 @@ if(getItem("name") == undefined) {
     //Only add the listener if the input is needed
     $("#username-submit-button").click(function () {
         $("#enter-channel-name-modal").modal('toggle');
-    
+
         //Start the mixer collection process
         startMixer($("#username-input").val());
     });
@@ -56,7 +56,7 @@ function startMixer(channel) {
         startViewerTracking(data.viewersCurrent);
 
         // Set username in the top right
-        $("#mixer-username").text(data.token);        
+        $("#mixer-username").text(data.token);
     }).fail(function () {
         alert("Error ~ please refresh.");
         location.reload();
