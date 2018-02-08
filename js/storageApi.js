@@ -16,8 +16,3 @@ function setItem(name, value) {
 function getItem(name) {
     return sessionStorage[name];
 }
-
-export {
-    setItem,
-    getItem
-};

@@ -62,11 +62,7 @@ function startMixer(channel) {
         alert("Error ~ please refresh.");
         location.reload();
     });
-}
-
-function startCarina(id) {
-    new carinaHandler(id);
-}
+}    
 
 function startViewerTracking(currentViewers) {
     liveViewerChart = new Chart($("#live-viewer-chart"), {
