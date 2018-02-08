@@ -53,6 +53,7 @@ function pushToChart(chart, label, data) {
 
 /**
  * Creates a new row in a table and then inserts the HTML markup
+ * If there is over 10 elements in the table already, it will remove the last one
  * 
  * @param {any} tableId The ID of the table
  * @param {any} markup The HTML markup
@@ -66,14 +67,14 @@ function addToTable(tableId, markup) {
 
 /**
  * Removes a specified row from the table.
- * If index = -1 it removes the first element of the table
+ * If index = -1 it removes the last row of the table
  * 
  * @param {any} tableId The ID of the table
  * @param {any} index The index of the table to remove
  */
 function removeFromTable(tableId, index) {
     if(index == -1) {
-        document.getElementById(tableId).deleteRow(0);
+        document.getElementById(tableId).deleteRow(document.getElementById(tableId).rows.length - 1);
     } else {
         document.getElementById(tableId).deleteRow(index);
     }

@@ -109,3 +109,11 @@ function startViewerTracking(currentViewers) {
         });
     }, 60000);
 }
+
+addToTable("recent-events-table", "<b>test 1</b>");
+addToTable("recent-events-table", "<b>test 2</b>");
+addToTable("recent-events-table", "<b>test 3</b>");
+
+setTimeout(() => {
+    removeFromTable("recent-events-table", -1);
+}, 3000);
