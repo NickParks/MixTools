@@ -5,8 +5,8 @@ setItem("recent-messages", JSON.stringify([])); //Create and empty the array on 
 function connectToChat(id) {
     $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => { }).done((data) => {
         //Connect to chat
-        var num = generateRandNumb(0, data.endpoints.length);
-        console.log(num);
+        var num = generateRandNumb(0, data.endpoints.length - 1);
+        console.log(data.endpoints.length + " - " + num);
         chatSocket = new WebSocket(data.endpoints[num]);
 
         chatSocket.addEventListener('open', (event) => {
@@ -51,8 +51,6 @@ function connectToChat(id) {
                         msg: buildMsg(data.data.message.message),
                         sender: data.data.user_name
                     }
-
-                    console.log("Pushing to recentMessages", message);
 
                     recentMessages.push(message);
                     setItem("recent-messages", JSON.stringify(recentMessages));
