@@ -19,6 +19,19 @@ function getItem(name) {
 }
 
 /**
+ * Creates a new row in a table and then inserts the HTML markup
+ * 
+ * @param {any} tableId The ID of the table
+ * @param {any} markup The HTML markup
+ */
+function addToTable(tableId, markup) {
+    var table = document.getElementById(tableId);
+    var newRow = table.insertRow(table.rows + 1);
+    var newCell = newRow.insertCell(0);
+    newCell.innerHTML = markup;
+}
+
+/**
  * Generates a random number between the given minimum and maxium values
  * 
  * @param {any} min The minimum value
