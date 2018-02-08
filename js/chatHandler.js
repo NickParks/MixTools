@@ -2,6 +2,12 @@ var chatSocket;
 
 setItem("recent-messages", JSON.stringify([])); //Create and empty the array on every load
 
+/**
+ * Starts the main chat process. Connects to a random chat endpoint that is 
+ * recieved after querying the mixer chat api
+ * 
+ * @param {any} id The channel ID
+ */
 function connectToChat(id) {
     $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => { }).done((data) => {
         //Connect to chat
@@ -64,6 +70,12 @@ function connectToChat(id) {
     });
 }
 
+/**
+ * Builds the full user message from the message array
+ * 
+ * @param {any} messages The message array
+ * @returns A string of the message
+ */
 function buildMsg(messages) {
     var message = "";
 
@@ -74,6 +86,9 @@ function buildMsg(messages) {
     return message.trim();
 }
 
+/**
+ * Closes the chat socket
+ */
 function closeChat(){
     chatSocket.close();
 }
