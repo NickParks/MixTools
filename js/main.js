@@ -50,7 +50,8 @@ function startMixer(channel) {
 
         startCarina(data.id);
         startViewerTracking(data.viewersCurrent);
-
+        connectToChat(data.id);
+        
         // Set username in the top right
         $("#mixer-username").text(data.token);
     }).fail(function () {
