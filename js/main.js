@@ -68,7 +68,7 @@ function startViewerTracking(currentViewers) {
     liveViewerChart = new Chart($("#live-viewer-chart"), {
         type: 'line',
         data: {
-            labels: [''],
+            labels: [],
             datasets: [{
                 data: [],
                 label: "Viewers",
@@ -124,10 +124,10 @@ function startViewerTracking(currentViewers) {
  */
 function pushToChart(chart, label, data) {
     if (chart.data.labels.length > 15) {
-        chart.data.labels.splice(0, 1);
-        chart.data.datasets[0].data.splice(0, 1);
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
     }
-
+    
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
 
