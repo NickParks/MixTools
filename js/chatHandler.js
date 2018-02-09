@@ -2,7 +2,7 @@ var chatSocket;
 
 /**
  * Starts the main chat process. Connects to a random chat endpoint that is 
- * recieved after querying the mixer chat api
+ * received after querying the mixer chat api
  * 
  * @param {any} id The channel ID
  */
@@ -19,7 +19,7 @@ function connectToChat(id) {
 
         chatSocket.addEventListener('error', (event) => {
             console.log("WebSocket error", event.data);
-            return connectToChat(id); //Just recursivly keep trying to reconnect
+            return connectToChat(id); //Just recursively keep trying to reconnect
         });
 
         chatSocket.addEventListener('message', (event) => {
