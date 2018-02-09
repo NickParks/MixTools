@@ -50,6 +50,7 @@ function connectToChat(id) {
                         recentMessages.shift();
                     }
 
+                    //Handle the message and store it in an object
                     var message = {
                         id: data.data.id,
                         msg: buildMsg(data.data.message.message),
@@ -58,6 +59,17 @@ function connectToChat(id) {
 
                     recentMessages.push(message);
                     setItem("recent-messages", JSON.stringify(recentMessages));
+
+                    //Check for and update unique chatters
+                    var uniqueChatters = JSON.parse(getItem("unique-chatters"));
+                    console.log(uniqueChatters.indexOf(data.data.user_id) + " for user " + data.data.user_name);
+
+                    if (uniqueChatters.indexOf(data.data.user_id) == -1) {
+                        uniqueChatters.push(data.data.user_id);
+                        $("#unique-chatters").text(uniqueChatters.length);
+                    }
+
+                    setItem("unique-chatters", JSON.stringify(uniqueChatters));
                 }
             }
         });

@@ -48,7 +48,7 @@ function startMixer(channel) {
         setItem("new-followers", 0);
         setItem("new-viewers", 0);
         setItem("recent-messages", JSON.stringify([]));
-        setItem("unique-chatters", 0);
+        setItem("unique-chatters", JSON.stringify([]));
 
         startCarina(data.id);
         startViewerTracking(data.viewersCurrent);
