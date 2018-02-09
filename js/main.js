@@ -58,7 +58,7 @@ function startMixer(channel) {
         alert("Error ~ please refresh.");
         location.reload();
     });
-}    
+}
 
 function startViewerTracking(currentViewers) {
     liveViewerChart = new Chart($("#live-viewer-chart"), {

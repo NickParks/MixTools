@@ -1,7 +1,7 @@
-function startCarina(id){
+function startCarina(id) {
     var ca = new carina.Carina().open();
-    
-    ca.subscribe(`channel:${this.id}:update`, (data) => {
+
+    ca.subscribe(`channel:${id}:update`, (data) => {
         //Concurrent viewer count changes
         if (data.viewersCurrent != undefined) {
             if (data.viewersCurrent > getItem("peak-viewers")) { // Check if it's greater than the previous peak
@@ -17,14 +17,15 @@ function startCarina(id){
 
     });
 
-    ca.subscribe(`channel:${this.id}:followed`, (data) => {
+    ca.subscribe(`channel:${id}:followed`, (data) => {
+        console.log(data);
         if (data.following) {
             setItem("new-followers", parseInt(getItem("new-followers")) + 1); //Add one to the total new followers
-            var markup = "<i class='fas fa-plus'></i>" + data.user.username + " followed";
+            var markup = "<i class='fas fa-plus'></i> " + data.user.username + " followed";
             addToTable("recent-events-table", markup);
         } else {
             setItem("new-followers", parseInt(getItem("new-followers")) - 1); //Subtract the total new followers
-            var markup = "<i class='fas fa-minus'></i>" + data.user.username + " unfollowed";
+            var markup = "<i class='fas fa-minus'></i> " + data.user.username + " unfollowed";
             addToTable("recent-events-table", markup);
         }
 
