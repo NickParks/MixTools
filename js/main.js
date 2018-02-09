@@ -111,3 +111,8 @@ function startViewerTracking(currentViewers) {
         });
     }, 60000);
 }
+
+//Logout listener
+$("#logout-button").on('click', (event) => {
+    logout();
+});

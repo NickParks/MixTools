@@ -18,6 +18,14 @@ function getItem(name) {
     return sessionStorage[name];
 }
 
+/**
+ * Logs the user out.
+ * Clears every session storage value.
+ */
+function logout() {
+    sessionStorage.clear(); //Clear
+    location.reload(); //Reload the page to restart process
+}
 
 /**
  * Pushes new information the provided ChartJS chart
@@ -61,10 +69,10 @@ function pushToChart(chart, label, data) {
 function addToTable(tableId, markup) {
     var table = document.getElementById(tableId);
 
-    if(table.rows.length >= 10) {
+    if (table.rows.length >= 10) {
         removeFromTable(tableId, -1); //Remove the last element
     }
-    
+
     var newRow = table.insertRow(table.rows.length);
     var newCell = newRow.insertCell(0);
     newCell.innerHTML = markup;
@@ -78,7 +86,7 @@ function addToTable(tableId, markup) {
  * @param {any} index The index of the table to remove
  */
 function removeFromTable(tableId, index) {
-    if(index == -1) {
+    if (index == -1) {
         document.getElementById(tableId).deleteRow(document.getElementById(tableId).rows.length - 1);
     } else {
         document.getElementById(tableId).deleteRow(index);
@@ -105,4 +113,4 @@ function getLocalTime() {
         minute: 'numeric',
         hour12: true
     });
-} 
+}
