@@ -1,7 +1,5 @@
 var chatSocket;
 
-setItem("recent-messages", JSON.stringify([])); //Create and empty the array on every load
-
 /**
  * Starts the main chat process. Connects to a random chat endpoint that is 
  * recieved after querying the mixer chat api
@@ -9,7 +7,7 @@ setItem("recent-messages", JSON.stringify([])); //Create and empty the array on 
  * @param {any} id The channel ID
  */
 function connectToChat(id) {
-    $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => { }).done((data) => {
+    $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => {}).done((data) => {
         //Connect to chat
         var num = generateRandNumb(0, data.endpoints.length - 1);
         console.log(data.endpoints.length + " - " + num);
@@ -28,27 +26,27 @@ function connectToChat(id) {
             //Listen to different events sent
             var data = JSON.parse(event.data); //Parse the event data
 
-            if(data.type == "event") {
+            if (data.type == "event") {
                 //Welcome event - called on first connect
-                if(data.event == "WelcomeEvent") {
+                if (data.event == "WelcomeEvent") {
                     //Connect to chat so we can start getting live events
                     var authPacket = {
                         "type": "method",
                         "method": "auth",
                         "arguments": [
-                           id
+                            id
                         ],
                         "id": 0
-                     }
+                    }
 
-                     chatSocket.send(JSON.stringify(authPacket));
+                    chatSocket.send(JSON.stringify(authPacket));
                 }
 
                 //Chat event
-                if(data.event == "ChatMessage") {
+                if (data.event == "ChatMessage") {
                     //Store recent 30 messages in array
                     var recentMessages = JSON.parse(getItem("recent-messages"));
-                    if(recentMessages.length >= 30) {
+                    if (recentMessages.length >= 30) {
                         recentMessages.shift();
                     }
 
@@ -78,7 +76,7 @@ function buildMsg(messages) {
     var message = "";
 
     messages.forEach(obj => {
-        message += obj.text;    
+        message += obj.text;
     });
 
     return message.trim();
@@ -87,6 +85,6 @@ function buildMsg(messages) {
 /**
  * Closes the chat socket
  */
-function closeChat(){
+function closeChat() {
     chatSocket.close();
 }
