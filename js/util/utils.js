@@ -38,6 +38,36 @@ function loadPreviousValues() {
 }
 
 /**
+ * Creates a new instance of the chart
+ * 
+ * @param {any} id The ID of the canvas
+ * @returns A new ChartJS instance
+ */
+function createChart(id) {
+    return new Chart($(id), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                label: "Viewers",
+                borderColor: "#0B62A4",
+                backgroundColor: "#2677B5",
+                fill: true
+            }]
+        },
+        options: {
+            title: {
+                display: false
+            },
+            legend: {
+                display: false
+            }
+        }
+    });
+}
+
+/**
  * Pushes new information the provided ChartJS chart
  * In this case the label will be a timestamp/date and the data will be the viewer count
  * 

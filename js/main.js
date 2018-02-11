@@ -8,16 +8,6 @@ $(document).ready(function () {
         console.log("loaded");
     });
 
-    //For loading HTML into wrapper without refreshing/losing data
-    $("a").on('click', function (event) { //Cannot use ES6 due to the loss of 'this'
-        event.preventDefault();
-
-        var href = $(this).attr('href');
-
-        if (href != window.location.href) {
-            $("#page-wrapper").load(href, function (response, status, xhr) {});
-        }
-    });
 
     //Check if a name already exists in sessionStorage 
     if (getItem("name") == undefined) {
@@ -75,57 +65,52 @@ $(document).ready(function () {
             location.reload();
         });
     }
+});
 
-    function startViewerTracking(currentViewers) {
-        liveViewerChart = new Chart($("#live-viewer-chart"), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    data: [],
-                    label: "Viewers",
-                    borderColor: "#0B62A4",
-                    backgroundColor: "#2677B5",
-                    fill: true
-                }]
-            },
-            options: {
-                title: {
-                    display: false
-                },
-                legend: {
-                    display: false
-                }
-            }
-        });
-
-        $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {}).done(function (data) {
-            if (data.viewersCurrent - 30 <= 0) {
-                liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
-            } else {
-                liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data.viewersCurrent - 30) / 10, 10) * 10;
-            }
-
-            liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
-
-            pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
-        }).fail(function (data) {
-            //Do nothing for now
-        });
-
-        setInterval(function () {
-            $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
-
-            }).done(function (data) {
-                pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
-            }).fail(function (data) {
-                //Do nothing for now
-            });
-        }, 60000);
-    }
-
+function setupListeners() {
     //Logout listener
     $("#logout-button").on('click', (event) => {
         logout();
     });
-});
+
+    //For loading HTML into wrapper without refreshing/losing data
+    $("a").on('click', function (event) { //Cannot use ES6 due to the loss of 'this'
+        event.preventDefault();
+
+        var href = $(this).attr('href');
+
+        if (href != window.location.href) {
+            $("#page-wrapper").load(href, function (response, status, xhr) {});
+        }
+    });
+}
+
+function initChart() {
+    if (liveViewerChart == undefined) {
+        liveViewerChart = createChart("#live-viewer-chart");
+    }
+
+    $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {}).done(function (data) {
+        if (data.viewersCurrent - 30 <= 0) {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+        } else {
+            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data.viewersCurrent - 30) / 10, 10) * 10;
+        }
+
+        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
+
+        pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
+    }).fail(function (data) {
+        //Do nothing for now
+    });
+
+    setInterval(function () {
+        $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
+
+        }).done(function (data) {
+            pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
+        }).fail(function (data) {
+            //Do nothing for now
+        });
+    }, 60000);
+}
