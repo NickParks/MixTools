@@ -8,6 +8,7 @@ $(document).ready(function () {
         console.log("loaded");
     });
 
+    var liveViewerChart;
 
     //Check if a name already exists in sessionStorage 
     if (getItem("name") == undefined) {
@@ -29,12 +30,17 @@ $(document).ready(function () {
             startMixer($("#username-input").val());
         });
     } else {
-        startMixer(getItem("name")); //Start collecting with the username in session storage
-
         loadPreviousValues();
+
+        //Start tracking again
+        startCarina(getItem("channel-id"));
+        initChart();
+        connectToChat("channel-id");
+
+        // Set username in the top right
+        $("#mixer-username").text(getItem("name"));
     }
 
-    var liveViewerChart;
 
     function startMixer(channel) {
         $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
@@ -55,7 +61,7 @@ $(document).ready(function () {
             setItem("unique-chatters", JSON.stringify([]));
 
             startCarina(data.id);
-            startViewerTracking(data.viewersCurrent);
+            initChart();
             connectToChat(data.id);
 
             // Set username in the top right
@@ -100,10 +106,13 @@ function initChart() {
         liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
 
         pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
+        startChartTimer();
     }).fail(function (data) {
         //Do nothing for now
     });
+}
 
+function startChartTimer() {
     setInterval(function () {
         $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
@@ -112,5 +121,5 @@ function initChart() {
         }).fail(function (data) {
             //Do nothing for now
         });
-    }, 60000);
+    }, 60000); //Every 60 seconds
 }
