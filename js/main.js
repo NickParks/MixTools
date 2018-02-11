@@ -1,3 +1,5 @@
+var liveViewerChart;
+
 $(document).ready(function () {
     if (typeof (Storage) == "undefined") {
         $("#no-storage-modal").modal('toggle');
@@ -5,42 +7,42 @@ $(document).ready(function () {
 
     //Load our main content
     $("#page-wrapper").load("main.html", function (response, status, xhr) {
-        console.log("loaded");
-    });
+        setupListeners();
 
-    var liveViewerChart;
+        if (status == "success") {
+            //Check if a name already exists in sessionStorage 
+            if (getItem("name") == undefined) {
+                $("#enter-channel-name-modal").modal('toggle');
 
-    //Check if a name already exists in sessionStorage 
-    if (getItem("name") == undefined) {
-        $("#enter-channel-name-modal").modal('toggle');
+                $("#username-input").on('input', function () {
+                    if ($("#username-input").val().length != 0) {
+                        $("#username-submit-button").prop('disabled', false);
+                    } else {
+                        $("#username-submit-button").prop('disabled', true);
+                    }
+                });
 
-        $("#username-input").on('input', function () {
-            if ($("#username-input").val().length != 0) {
-                $("#username-submit-button").prop('disabled', false);
+                //Only add the listener if the input is needed
+                $("#username-submit-button").click(function () {
+                    $("#enter-channel-name-modal").modal('toggle');
+
+                    //Start the mixer collection process
+                    startMixer($("#username-input").val());
+                });
             } else {
-                $("#username-submit-button").prop('disabled', true);
+                loadPreviousValues();
+
+                //Start tracking again
+                startCarina(getItem("channel-id"));
+                connectToChat(getItem("channel-id"));
+
+                // Set username in the top right
+                $("#mixer-username").text(getItem("name"));
             }
-        });
-
-        //Only add the listener if the input is needed
-        $("#username-submit-button").click(function () {
-            $("#enter-channel-name-modal").modal('toggle');
-
-            //Start the mixer collection process
-            startMixer($("#username-input").val());
-        });
-    } else {
-        loadPreviousValues();
-
-        //Start tracking again
-        startCarina(getItem("channel-id"));
-        initChart();
-        connectToChat("channel-id");
-
-        // Set username in the top right
-        $("#mixer-username").text(getItem("name"));
-    }
-
+        } else {
+            console.log("idk");
+        }
+    });
 
     function startMixer(channel) {
         $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
