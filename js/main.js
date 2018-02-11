@@ -13,17 +13,9 @@ $(document).ready(function () {
         event.preventDefault();
 
         var href = $(this).attr('href');
-        console.log(href);
-
-        console.log(href);
-        console.log(window.location.href);
 
         if (href != window.location.href) {
-            $("#page-wrapper").load(href, function (response, status, xhr) {
-                console.log("loaded");
-            });
-        } else {
-            console.log("same page");
+            $("#page-wrapper").load(href, function (response, status, xhr) {});
         }
     });
 
@@ -107,9 +99,7 @@ $(document).ready(function () {
             }
         });
 
-        $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
-
-        }).done(function (data) {
+        $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {}).done(function (data) {
             if (data.viewersCurrent - 30 <= 0) {
                 liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
             } else {

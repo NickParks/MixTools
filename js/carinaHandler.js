@@ -18,7 +18,6 @@ function startCarina(id) {
     });
 
     ca.subscribe(`channel:${id}:followed`, (data) => {
-        console.log(data);
         if (data.following) {
             setItem("new-followers", parseInt(getItem("new-followers")) + 1); //Add one to the total new followers
             var markup = "<i class='fas fa-plus'></i> " + data.user.username + " followed";

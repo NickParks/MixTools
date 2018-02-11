@@ -10,7 +10,6 @@ function connectToChat(id) {
     $.get("https://mixer.com/api/v1/chats/" + id + "/anonymous", (data) => {}).done((data) => {
         //Connect to chat
         var num = generateRandNumb(0, data.endpoints.length - 1);
-        console.log(data.endpoints.length + " - " + num);
         chatSocket = new WebSocket(data.endpoints[num]);
 
         chatSocket.addEventListener('open', (event) => {
@@ -62,7 +61,6 @@ function connectToChat(id) {
 
                     //Check for and update unique chatters
                     var uniqueChatters = JSON.parse(getItem("unique-chatters"));
-                    console.log(uniqueChatters.indexOf(data.data.user_id) + " for user " + data.data.user_name);
 
                     if (uniqueChatters.indexOf(data.data.user_id) == -1) {
                         uniqueChatters.push(data.data.user_id);
