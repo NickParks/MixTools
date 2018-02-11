@@ -54,16 +54,16 @@ function pushToChart(chart, label, data) {
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
 
-    if (data <= (liveViewerChart.options.scales.yAxes[0].ticks.min + 10)) {
+    if (data <= (chart.options.scales.yAxes[0].ticks.min + 10)) {
         if (data - 30 <= 0) {
-            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+            chart.options.scales.yAxes[0].ticks.min = 0;
         } else {
-            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
+            chart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
         }
     }
 
-    if (data >= (liveViewerChart.options.scales.yAxes[0].ticks.max - 10)) {
-        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
+    if (data >= (chart.options.scales.yAxes[0].ticks.max - 10)) {
+        chart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
     }
 
     chart.update();
