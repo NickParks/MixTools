@@ -1,118 +1,141 @@
-if (typeof (Storage) == "undefined") {
-    $("#no-storage-modal").modal('toggle');
-}
+$(document).ready(function () {
+    if (typeof (Storage) == "undefined") {
+        $("#no-storage-modal").modal('toggle');
+    }
 
-//Check if a name already exists in sessionStorage 
-if (getItem("name") == undefined) {
-    $("#enter-channel-name-modal").modal('toggle');
+    //Load our main content
+    $("#page-wrapper").load("main.html", function (response, status, xhr) {
+        console.log("loaded");
+    });
 
-    $("#username-input").on('input', function () {
-        if ($("#username-input").val().length != 0) {
-            $("#username-submit-button").prop('disabled', false);
+    //For loading HTML into wrapper without refreshing/losing data
+    $("a").on('click', function (event) { //Cannot use ES6 due to the loss of 'this'
+        event.preventDefault();
+
+        var href = $(this).attr('href');
+        console.log(href);
+
+        console.log(href);
+        console.log(window.location.href);
+
+        if (href != window.location.href) {
+            $("#page-wrapper").load(href, function (response, status, xhr) {
+                console.log("loaded");
+            });
         } else {
-            $("#username-submit-button").prop('disabled', true);
+            console.log("same page");
         }
     });
 
-    //Only add the listener if the input is needed
-    $("#username-submit-button").click(function () {
+    //Check if a name already exists in sessionStorage 
+    if (getItem("name") == undefined) {
         $("#enter-channel-name-modal").modal('toggle');
 
-        //Start the mixer collection process
-        startMixer($("#username-input").val());
-    });
-} else {
-    startMixer(getItem("name")); //Start collecting with the username in session storage
-
-    //Set previous values
-    $("#peak-viewer-count").text(getItem("peak-viewers"));
-    $("#net-follower-gain").text(getItem("new-followers"));
-    $("#unique-viewer-number").text(getItem("new-viewers"));
-}
-
-var liveViewerChart;
-
-function startMixer(channel) {
-    $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
-        if (data.statusCode == 404) {
-            alert("Name not found, please enter a correct channel name!");
-            location.reload();
-        }
-
-        setItem("name", data.token);
-        setItem("channel-id", data.id);
-        setItem("user-id", data.user.id);
-        setItem("starting-viewer-total", data.viewersTotal);
-        setItem("starting-follower-number", data.numFollowers);
-        setItem("peak-viewers", data.viewersCurrent);
-        setItem("new-followers", 0);
-        setItem("new-viewers", 0);
-        setItem("recent-messages", JSON.stringify([]));
-        setItem("unique-chatters", JSON.stringify([]));
-
-        startCarina(data.id);
-        startViewerTracking(data.viewersCurrent);
-        connectToChat(data.id);
-
-        // Set username in the top right
-        $("#mixer-username").text(data.token);
-    }).fail(function () {
-        alert("Error ~ please refresh.");
-        location.reload();
-    });
-}
-
-function startViewerTracking(currentViewers) {
-    liveViewerChart = new Chart($("#live-viewer-chart"), {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                data: [],
-                label: "Viewers",
-                borderColor: "#0B62A4",
-                backgroundColor: "#2677B5",
-                fill: true
-            }]
-        },
-        options: {
-            title: {
-                display: false
-            },
-            legend: {
-                display: false
+        $("#username-input").on('input', function () {
+            if ($("#username-input").val().length != 0) {
+                $("#username-submit-button").prop('disabled', false);
+            } else {
+                $("#username-submit-button").prop('disabled', true);
             }
-        }
-    });
+        });
 
-    $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
+        //Only add the listener if the input is needed
+        $("#username-submit-button").click(function () {
+            $("#enter-channel-name-modal").modal('toggle');
 
-    }).done(function (data) {
-        if (data.viewersCurrent - 30 <= 0) {
-            liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
-        } else {
-            liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data.viewersCurrent - 30) / 10, 10) * 10;
-        }
+            //Start the mixer collection process
+            startMixer($("#username-input").val());
+        });
+    } else {
+        startMixer(getItem("name")); //Start collecting with the username in session storage
 
-        liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
+        loadPreviousValues();
+    }
 
-        pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
-    }).fail(function (data) {
-        //Do nothing for now
-    });
+    var liveViewerChart;
 
-    setInterval(function () {
+    function startMixer(channel) {
+        $.get("http://mixer.com/api/v1/channels/" + channel, function (data) {}).done(function (data) {
+            if (data.statusCode == 404) {
+                alert("Name not found, please enter a correct channel name!");
+                location.reload();
+            }
+
+            setItem("name", data.token);
+            setItem("channel-id", data.id);
+            setItem("user-id", data.user.id);
+            setItem("starting-viewer-total", data.viewersTotal);
+            setItem("starting-follower-number", data.numFollowers);
+            setItem("peak-viewers", data.viewersCurrent);
+            setItem("new-followers", 0);
+            setItem("new-viewers", 0);
+            setItem("recent-messages", JSON.stringify([]));
+            setItem("unique-chatters", JSON.stringify([]));
+
+            startCarina(data.id);
+            startViewerTracking(data.viewersCurrent);
+            connectToChat(data.id);
+
+            // Set username in the top right
+            $("#mixer-username").text(data.token);
+        }).fail(function () {
+            alert("Error ~ please refresh.");
+            location.reload();
+        });
+    }
+
+    function startViewerTracking(currentViewers) {
+        liveViewerChart = new Chart($("#live-viewer-chart"), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    label: "Viewers",
+                    borderColor: "#0B62A4",
+                    backgroundColor: "#2677B5",
+                    fill: true
+                }]
+            },
+            options: {
+                title: {
+                    display: false
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+
         $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
 
         }).done(function (data) {
+            if (data.viewersCurrent - 30 <= 0) {
+                liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+            } else {
+                liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data.viewersCurrent - 30) / 10, 10) * 10;
+            }
+
+            liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data.viewersCurrent + 30) / 10, 10) * 10;
+
             pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
         }).fail(function (data) {
             //Do nothing for now
         });
-    }, 60000);
-}
 
-//Logout listener
-$("#logout-button").on('click', (event) => {
-    logout();
+        setInterval(function () {
+            $.get("http://mixer.com/api/v1/channels/" + getItem("name"), function () {
+
+            }).done(function (data) {
+                pushToChart(liveViewerChart, getLocalTime(), data.viewersCurrent);
+            }).fail(function (data) {
+                //Do nothing for now
+            });
+        }, 60000);
+    }
+
+    //Logout listener
+    $("#logout-button").on('click', (event) => {
+        logout();
+    });
 });

@@ -28,6 +28,16 @@ function logout() {
 }
 
 /**
+ * Load previous information
+ */
+function loadPreviousValues() {
+    //Set previous values
+    $("#peak-viewer-count").text(getItem("peak-viewers"));
+    $("#net-follower-gain").text(getItem("new-followers"));
+    $("#unique-viewer-number").text(getItem("new-viewers"));
+}
+
+/**
  * Pushes new information the provided ChartJS chart
  * In this case the label will be a timestamp/date and the data will be the viewer count
  * 
