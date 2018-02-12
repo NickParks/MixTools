@@ -83,6 +83,10 @@ function setupListeners() {
 
     //For loading HTML into wrapper without refreshing/losing data
     $("a").on('click', function (event) { //Cannot use ES6 due to the loss of 'this'
+        if($(this).attr('id') == "logout-button") { // Allow logout button to function properly
+            return;
+        }
+
         event.preventDefault();
 
         var href = $(this).attr('href');
