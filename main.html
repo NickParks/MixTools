@@ -106,8 +106,9 @@
 
 <script>
     //Load saved content
-    loadPreviousValues();
-
-    var liveViewerChart = createChart("#live-viewer-chart");
-    initChart();
+    if(getItem("name") != undefined) {
+        var liveViewerChart = createChart("#live-viewer-chart");
+        loadPreviousValues();
+        initChart();        
+    }
 </script>

@@ -30,8 +30,6 @@ $(document).ready(function () {
                     startMixer($("#username-input").val());
                 });
             } else {
-                loadPreviousValues();
-
                 //Start tracking again
                 startCarina(getItem("channel-id"));
                 connectToChat(getItem("channel-id"));
@@ -59,6 +57,7 @@ $(document).ready(function () {
             setItem("peak-viewers", data.viewersCurrent);
             setItem("new-followers", 0);
             setItem("new-viewers", 0);
+            setItem("chart-data", JSON.stringify({}));
             setItem("recent-messages", JSON.stringify([]));
             setItem("unique-chatters", JSON.stringify([]));
 

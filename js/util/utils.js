@@ -35,7 +35,36 @@ function loadPreviousValues() {
     $("#peak-viewer-count").text(getItem("peak-viewers"));
     $("#net-follower-gain").text(getItem("new-followers"));
     $("#unique-viewer-number").text(getItem("new-viewers"));
+    console.log("Called");
     $("#unique-chatters").text(JSON.parse(getItem("unique-chatters")).length);
+
+    //Update chart
+    var chartData = JSON.parse(getItem("chart-data"));
+    for(var label in chartData) {
+        var data = chartData[label];
+        
+        //Don't push to chart if data is already there
+        if(liveViewerChart.data.labels.indexOf(label) != -1) {
+            continue;
+        }
+
+        liveViewerChart.data.labels.push(label);
+        liveViewerChart.data.datasets[0].data.push(data);
+    
+        if (data <= (liveViewerChart.options.scales.yAxes[0].ticks.min + 10)) {
+            if (data - 30 <= 0) {
+                liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
+            } else {
+                liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
+            }
+        }
+    
+        if (data >= (liveViewerChart.options.scales.yAxes[0].ticks.max - 10)) {
+            liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
+        }
+    
+        liveViewerChart.update();
+    }
 }
 
 /**
@@ -77,13 +106,18 @@ function createChart(id) {
  * @param {any} data The data to be inserted into the dataset
  */
 function pushToChart(chart, label, data) {
+    var savedData = JSON.parse(getItem("chart-data"));
+
     if (chart.data.labels.length > 15) {
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
+        savedData.shift();
     }
 
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
+    savedData[label] = data;
+    setItem("chart-data", JSON.stringify(savedData));
 
     if (data <= (chart.options.scales.yAxes[0].ticks.min + 10)) {
         if (data - 30 <= 0) {
