@@ -40,17 +40,17 @@ function loadPreviousValues() {
 
     //Update chart
     var chartData = JSON.parse(getItem("chart-data"));
-    for(var label in chartData) {
+    for (var label in chartData) {
         var data = chartData[label];
-        
+
         //Don't push to chart if data is already there
-        if(liveViewerChart.data.labels.indexOf(label) != -1) {
+        if (liveViewerChart.data.labels.indexOf(label) != -1) {
             continue;
         }
 
         liveViewerChart.data.labels.push(label);
         liveViewerChart.data.datasets[0].data.push(data);
-    
+
         if (data <= (liveViewerChart.options.scales.yAxes[0].ticks.min + 10)) {
             if (data - 30 <= 0) {
                 liveViewerChart.options.scales.yAxes[0].ticks.min = 0;
@@ -58,11 +58,11 @@ function loadPreviousValues() {
                 liveViewerChart.options.scales.yAxes[0].ticks.min = parseInt((data - 30) / 10, 10) * 10;
             }
         }
-    
+
         if (data >= (liveViewerChart.options.scales.yAxes[0].ticks.max - 10)) {
             liveViewerChart.options.scales.yAxes[0].ticks.max = parseInt((data + 30) / 10, 10) * 10;
         }
-    
+
         liveViewerChart.update();
     }
 }
@@ -177,6 +177,21 @@ function removeFromTable(tableId, index) {
  */
 function generateRandNumb(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Calculates the average from an array of numbers
+ * 
+ * @param {any} nums The array of numbers
+ * @returns Average
+ */
+function calculateAvg(nums) {
+    var sum = 0;
+    for (var x = 0; x < numbs.length; x++) {
+        sum += parseInt(nums[x], 10); //10 is our base number
+    }
+
+    return sum / nums.length;
 }
 
 /** 
