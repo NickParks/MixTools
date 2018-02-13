@@ -50,11 +50,11 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-comments fa-5x"></i>
+                        <i class="fa fa-chart-bar fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge" id="unique-chatters">0</div>
-                        <div>Unique Chatters</div>
+                        <div class="huge" id="average-viewers">0</div>
+                        <div>Average Viewers</div>
                     </div>
                 </div>
             </div>
@@ -106,9 +106,9 @@
 
 <script>
     //Load saved content
-    if(getItem("name") != undefined) {
+    if (getItem("name") != undefined) {
         var liveViewerChart = createChart("#live-viewer-chart");
         loadPreviousValues();
-        initChart();        
+        initChart();
     }
 </script>
