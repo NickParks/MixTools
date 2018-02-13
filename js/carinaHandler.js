@@ -8,6 +8,13 @@ function startCarina(id) {
                 setItem("peak-viewers", data.viewersCurrent);
                 $("#peak-viewer-count").text(getItem("peak-viewers")); //Set our new peak in session storage and display to user
             }
+
+            //Calculate average & display to user
+            var pastViewerCounts = JSON.parse(getItem("session-viewer-counts"));
+            pastViewerCounts.push(data.viewersCurrent);
+            var average = calculateAvg(pastViewerCounts);
+            $("#average-viewers").text(average);
+            setItem(JSON.stringify(pastViewerCounts));
         }
 
         if (data.viewersTotal != undefined) {

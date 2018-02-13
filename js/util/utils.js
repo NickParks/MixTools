@@ -187,7 +187,7 @@ function generateRandNumb(min, max) {
  */
 function calculateAvg(nums) {
     var sum = 0;
-    for (var x = 0; x < numbs.length; x++) {
+    for (var x = 0; x < nums.length; x++) {
         sum += parseInt(nums[x], 10); //10 is our base number
     }
 

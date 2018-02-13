@@ -57,6 +57,7 @@ $(document).ready(function () {
             setItem("peak-viewers", data.viewersCurrent);
             setItem("new-followers", 0);
             setItem("new-viewers", 0);
+            setItem("session-viewer-counts", JSON.stringify([]));
             setItem("chart-data", JSON.stringify({}));
             setItem("recent-messages", JSON.stringify([]));
             setItem("unique-chatters", JSON.stringify([]));
@@ -82,7 +83,7 @@ function setupListeners() {
 
     //For loading HTML into wrapper without refreshing/losing data
     $("a").on('click', function (event) { //Cannot use ES6 due to the loss of 'this'
-        if($(this).attr('id') == "logout-button") { // Allow logout button to function properly
+        if ($(this).attr('id') == "logout-button") { // Allow logout button to function properly
             return;
         }
 
