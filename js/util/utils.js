@@ -40,8 +40,9 @@ function loadPreviousValues() {
 
     //Update chart
     var chartData = JSON.parse(getItem("chart-data"));
-    for (var label in chartData) {
-        var data = chartData[label];
+    for (var x = 0; x < chartData.length; x++) {
+        var data = chartData[x].data;
+        var label = chartData[x].label;
 
         //Don't push to chart if data is already there
         if (liveViewerChart.data.labels.indexOf(label) != -1) {
@@ -116,7 +117,11 @@ function pushToChart(chart, label, data) {
 
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(data);
-    savedData[label] = data;
+    savedData.push({
+        label: label,
+        data: data
+    });
+
     setItem("chart-data", JSON.stringify(savedData));
 
     if (data <= (chart.options.scales.yAxes[0].ticks.min + 10)) {

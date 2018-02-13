@@ -58,7 +58,7 @@ $(document).ready(function () {
             setItem("new-followers", 0);
             setItem("new-viewers", 0);
             setItem("session-viewer-counts", JSON.stringify([]));
-            setItem("chart-data", JSON.stringify({}));
+            setItem("chart-data", JSON.stringify([]));
             setItem("recent-messages", JSON.stringify([]));
             setItem("unique-chatters", JSON.stringify([]));
 
