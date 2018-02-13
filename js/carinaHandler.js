@@ -14,7 +14,7 @@ function startCarina(id) {
             pastViewerCounts.push(data.viewersCurrent);
             var average = calculateAvg(pastViewerCounts);
             $("#average-viewers").text(average);
-            setItem(JSON.stringify(pastViewerCounts));
+            setItem("session-viewer-counts", JSON.stringify(pastViewerCounts));
         }
 
         if (data.viewersTotal != undefined) {

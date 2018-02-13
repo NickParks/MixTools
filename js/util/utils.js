@@ -191,7 +191,7 @@ function calculateAvg(nums) {
         sum += parseInt(nums[x], 10); //10 is our base number
     }
 
-    return sum / nums.length;
+    return Math.floor(sum / nums.length);
 }
 
 /** 
