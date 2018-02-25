@@ -43,9 +43,9 @@ function connectToChat(id) {
 
                 //Chat event
                 if (data.event == "ChatMessage") {
-                    //Store recent 30 messages in array
+                    //Store recent 100 messages in array
                     var recentMessages = JSON.parse(getItem("recent-messages"));
-                    if (recentMessages.length >= 30) {
+                    if (recentMessages.length >= 100) {
                         recentMessages.shift();
                     }
 
@@ -69,6 +69,20 @@ function connectToChat(id) {
 
                     setItem("unique-chatters", JSON.stringify(uniqueChatters));
                 }
+
+                //Deleted message
+                if (data.event == "DeleteMessage") {
+                    //Get the deleted message info
+                    var deleted_message = getMessageById(data.id);
+
+                    var deletedMessage = {
+                        mod_name: data.data.user_name,
+                        chat_message: deleted_message.msg,
+                        deleted_name: deleted_message.sender
+                    }
+
+                    console.log(deletedMessage);
+                }
             }
         });
     }).fail((data) => {
@@ -90,6 +104,24 @@ function buildMsg(messages) {
     });
 
     return message.trim();
+}
+
+/**
+ * Gets a message from the Recent Message array by ID
+ * 
+ * @param {any} id The ID of the message object
+ * @returns Recent message Object
+ */
+function getMessageById(id) {
+    var recentMessages = JSON.parse(getItem("recent-messages"));
+
+    recentMessages.forEach((msg) => {
+        if (msg.id == id) {
+            return msg;
+        }
+    });
+
+    return null;
 }
 
 /**
