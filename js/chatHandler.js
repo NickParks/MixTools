@@ -75,16 +75,19 @@ function connectToChat(id) {
                 //Deleted message
                 if (data.event == "DeleteMessage") {
                     //Get the deleted message info
-                    console.log(data.data.id);
+                    console.log(data);
                     var deleted_message = getMessageById(data.data.id);
 
                     console.log(deleted_message);
 
                     var deletedMessage = {
-                        mod_name: data.data.user_name,
+                        mod_name: data.data.moderator.user_name,
                         chat_message: deleted_message.msg,
                         deleted_name: deleted_message.sender
                     }
+
+                    var markup = `${deletedMessage.mod_name} deleted a message by ${deletedMessage.deleted_name}: ${deletedMessage.chat_message}`;
+                    addToTable("deleted-messages-table", markup);
                 }
             }
         });
