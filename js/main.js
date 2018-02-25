@@ -60,6 +60,7 @@ $(document).ready(function () {
             setItem("session-viewer-counts", JSON.stringify([]));
             setItem("chart-data", JSON.stringify([]));
             setItem("recent-messages", JSON.stringify([]));
+            setItem("deleted-messages", JSON.stringify([]));
             setItem("unique-chatters", JSON.stringify([]));
 
             startCarina(data.id);
