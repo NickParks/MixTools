@@ -59,6 +59,8 @@ function connectToChat(id) {
                     recentMessages.push(message);
                     setItem("recent-messages", JSON.stringify(recentMessages));
 
+                    console.log("Pushed message with ID", message.id);
+
                     //Check for and update unique chatters
                     var uniqueChatters = JSON.parse(getItem("unique-chatters"));
 
@@ -73,15 +75,16 @@ function connectToChat(id) {
                 //Deleted message
                 if (data.event == "DeleteMessage") {
                     //Get the deleted message info
-                    var deleted_message = getMessageById(data.id);
+                    console.log(data.data.id);
+                    var deleted_message = getMessageById(data.data.id);
+
+                    console.log(deleted_message);
 
                     var deletedMessage = {
                         mod_name: data.data.user_name,
                         chat_message: deleted_message.msg,
                         deleted_name: deleted_message.sender
                     }
-
-                    console.log(deletedMessage);
                 }
             }
         });
@@ -115,13 +118,15 @@ function buildMsg(messages) {
 function getMessageById(id) {
     var recentMessages = JSON.parse(getItem("recent-messages"));
 
+    var deletedMsg; //Leave as undefined for now
+
     recentMessages.forEach((msg) => {
         if (msg.id == id) {
-            return msg;
+            deletedMsg = msg;
         }
     });
 
-    return null;
+    return deletedMsg; //Return either undefined if not found, or the DeletedMsg Object
 }
 
 /**
