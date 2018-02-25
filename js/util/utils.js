@@ -35,7 +35,6 @@ function loadPreviousValues() {
     $("#peak-viewer-count").text(getItem("peak-viewers"));
     $("#net-follower-gain").text(getItem("new-followers"));
     $("#unique-viewer-number").text(getItem("new-viewers"));
-    console.log("Called");
     $("#unique-chatters").text(JSON.parse(getItem("unique-chatters")).length);
 
     //Update chart
