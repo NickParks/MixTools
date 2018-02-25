@@ -149,6 +149,10 @@ function pushToChart(chart, label, data) {
 function addToTable(tableId, markup) {
     var table = document.getElementById(tableId);
 
+    if (table.rows == null) {
+        return; //If the table hasn't been loaded yet~ stops from nulling out
+    }
+
     if (table.rows.length >= 10) {
         removeFromTable(tableId, -1); //Remove the last element
     }
